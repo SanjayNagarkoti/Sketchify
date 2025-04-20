@@ -105,6 +105,7 @@ const ToolsShowcase: React.FC = () => {
       sx={{
         position: 'relative',
         py: { xs: 10, md: 16 },
+        scrollMarginTop: '80px',
       }}
     >
       <Container maxWidth="xl">

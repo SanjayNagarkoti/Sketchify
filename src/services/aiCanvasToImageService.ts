@@ -98,16 +98,18 @@ const generatePromptFromCanvas = async (
 
     // Create a system prompt for generating image prompts
     const systemPrompt = 
-      "You are an expert at creating prompts for text-to-image generation AI systems. " +
-      "Analyze the uploaded drawing and create a detailed prompt that would generate a high-quality, refined version of what's drawn. " +
-      "Your prompt should be concise but include essential details about style, subject, composition, colors, and mood. " +
-      "Keep the prompt under 75 words while maintaining its effectiveness. " +
-      "If the user has provided additional text guidance, incorporate that into your prompt. " +
-      "Return ONLY the generation prompt without explanation or commentary.";
+  "You are an expert in text-to-image prompt engineering. " +
+  "Carefully analyze the uploaded sketch or drawing and create a concise, detailed prompt that will generate a high-quality, fully detailed, full-sized image that closely resembles and refines the sketch. " +
+  "Your goal is to turn the sketch into a realistic or artistic version while preserving its original layout, subject, and composition. " +
+  "IMPORTANT: Prioritize the user’s exact requests and guidance where given, and treat them as mandatory. " +
+  "Focus on style, subject, composition, colors, mood, and completeness. " +
+  "Do NOT let the image appear cropped, incomplete, or different in structure from the sketch. " +
+  "Limit the output to 75 words, and return only the generation prompt without any extra text or explanation.";
+
 
     // Create the inputs array - include user prompt if provided
     const inputs = userPrompt 
-      ? [systemPrompt, `The user has provided this guidance: ${userPrompt}`, imageFileData]
+      ? [systemPrompt, `The user has provided this specific request: "${userPrompt}" - Make sure to incorporate these requirements prominently in your prompt along with the sketch.`, imageFileData]
       : [systemPrompt, imageFileData];
 
     // Generate the prompt

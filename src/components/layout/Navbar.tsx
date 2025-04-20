@@ -21,10 +21,9 @@ import { useThemeMode } from '../../theme/ThemeContext';
 
 const navItems = [
   { id: 'home', label: 'Home' },
-  { id: 'features', label: 'Features' },
-  { id: 'demo', label: 'How It Works' },
-  { id: 'future-tools', label: 'Coming Soon' },
-  { id: 'about', label: 'About' },
+  { id: 'how-it-works', label: 'How It Works' },
+  { id: 'tools', label: 'Tools' },
+  { id: 'about', label: 'Why Choose Sketchify' },
   { id: 'contact', label: 'Contact' }
 ];
 

@@ -54,6 +54,7 @@ const About: React.FC = () => {
       sx={{ 
         position: 'relative',
         py: { xs: 10, md: 16 },
+        scrollMarginTop: '80px',
         background: theme.palette.mode === 'dark' 
           ? 'linear-gradient(180deg, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9))' 
           : 'linear-gradient(180deg, rgba(248, 250, 252, 0.7), rgba(248, 250, 252, 0.9))',
@@ -198,12 +199,61 @@ const About: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  padding: 3,
                 }}
               >
-                {/* Replace with actual about/team image */}
-                <Typography variant="body2" color="text.secondary">
-                  Team or Product Illustration
-              </Typography>
+                <svg 
+                  width="100%" 
+                  height="100%" 
+                  viewBox="0 0 800 600" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ 
+                    maxWidth: '100%', 
+                    maxHeight: '100%',
+                    filter: 'drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15))'
+                  }}
+                >
+                  {/* Canvas/Sketch Background */}
+                  <rect x="100" y="100" width="600" height="400" rx="20" fill={theme.palette.mode === 'dark' ? '#2A2A2A' : '#FFFFFF'} stroke="#4ECDC4" strokeWidth="4" />
+                  
+                  {/* Person Drawing */}
+                  <circle cx="200" cy="480" r="60" fill={theme.palette.mode === 'dark' ? '#555555' : '#EEEEEE'} />
+                  <rect x="180" y="550" width="40" height="100" rx="10" fill={theme.palette.mode === 'dark' ? '#555555' : '#EEEEEE'} />
+                  <rect x="160" y="600" width="80" height="20" rx="5" fill={theme.palette.mode === 'dark' ? '#444444' : '#DDDDDD'} />
+                  <circle cx="200" cy="460" r="30" fill={theme.palette.mode === 'dark' ? '#666666' : '#F8F8F8'} />
+                  
+                  {/* AI Technology Elements */}
+                  <circle cx="400" cy="250" r="50" fill="rgba(78, 205, 196, 0.1)" stroke="#4ECDC4" strokeWidth="3" strokeDasharray="10 5" />
+                  <circle cx="400" cy="250" r="70" fill="transparent" stroke="#4ECDC4" strokeWidth="2" strokeDasharray="5 8" />
+                  <circle cx="400" cy="250" r="90" fill="transparent" stroke="#4ECDC4" strokeWidth="1" strokeDasharray="3 10" />
+                  
+                  {/* Code Output */}
+                  <rect x="550" y="150" width="160" height="300" rx="10" fill={theme.palette.mode === 'dark' ? '#333333' : '#F0F0F0'} />
+                  <rect x="570" y="170" width="120" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#4ECDC4' : '#4ECDC4'} opacity="0.7" />
+                  <rect x="570" y="190" width="80" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#FF6B6B' : '#FF6B6B'} opacity="0.7" />
+                  <rect x="570" y="210" width="100" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#FFFFFF' : '#666666'} opacity="0.5" />
+                  <rect x="570" y="230" width="90" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#FFFFFF' : '#666666'} opacity="0.5" />
+                  <rect x="570" y="250" width="110" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#4ECDC4' : '#4ECDC4'} opacity="0.7" />
+                  <rect x="570" y="270" width="70" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#FF6B6B' : '#FF6B6B'} opacity="0.7" />
+                  <rect x="570" y="290" width="120" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#FFFFFF' : '#666666'} opacity="0.5" />
+                  <rect x="570" y="310" width="100" height="10" rx="5" fill={theme.palette.mode === 'dark' ? '#FFFFFF' : '#666666'} opacity="0.5" />
+                  
+                  {/* Sketch/Drawing */}
+                  <path d="M200 250 Q300 180 400 250 Q500 320 550 250" stroke="#FF6B6B" strokeWidth="3" fill="transparent" />
+                  <path d="M250 300 Q350 350 450 300" stroke="#4ECDC4" strokeWidth="3" fill="transparent" />
+                  <rect x="150" y="200" width="80" height="50" rx="5" stroke="#FF6B6B" strokeWidth="2" fill="transparent" />
+                  <circle cx="350" cy="350" r="30" stroke="#4ECDC4" strokeWidth="2" fill="transparent" />
+                  
+                  {/* Connection Lines */}
+                  <path d="M400 250 L550 250" stroke={theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'} strokeWidth="2" strokeDasharray="5 5" />
+                  <path d="M250 250 L350 250" stroke={theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'} strokeWidth="2" strokeDasharray="5 5" />
+                  
+                  {/* Stars/Sparkles */}
+                  <path d="M300 120 L305 130 L315 130 L307 137 L310 147 L300 142 L290 147 L293 137 L285 130 L295 130 Z" fill="#FF6B6B" />
+                  <path d="M500 180 L505 190 L515 190 L507 197 L510 207 L500 202 L490 207 L493 197 L485 190 L495 190 Z" fill="#4ECDC4" />
+                  <path d="M450 350 L455 360 L465 360 L457 367 L460 377 L450 372 L440 377 L443 367 L435 360 L445 360 Z" fill="#FF6B6B" />
+                </svg>
               </Box>
             </motion.div>
           </Grid>

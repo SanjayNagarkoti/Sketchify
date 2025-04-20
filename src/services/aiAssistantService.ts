@@ -105,10 +105,10 @@ export const analyzeCanvas = async (imageData: string, prompt: string): Promise<
     // Create a better default prompt if user didn't provide one
     let enhancedPrompt = prompt.trim();
     if (!enhancedPrompt) {
-      enhancedPrompt = "Please analyze this drawing and describe what you see in a friendly, comprehensive way. Provide a clear, detailed description that would be helpful to a user. Explain what the drawing represents, its key features, and any interesting details. Format your response as a readable paragraph. Do not include any technical information like bounding boxes, coordinates, json data, or technical labels in your response.";
+      enhancedPrompt = "Identify what is drawn in this sketch and provide informative, educational content about it. Focus on facts, characteristics, and interesting information about the subject itself rather than describing the drawing. Format your response with clear sections, proper headings, and well-organized structure. Use markdown formatting like **bold** for section titles, bullet points for lists, and organize information into distinct categories. For example, if it's an apple, include sections on varieties, nutrition, health benefits, etc. Make the response visually appealing and easy to read with proper hierarchy in the information.";
     } else {
       // If user provided a prompt, still make sure we get nice formatting
-      enhancedPrompt = `${prompt} Please respond in a clear, user-friendly format. Avoid including technical details like bounding boxes, coordinates, or raw JSON.`;
+      enhancedPrompt = `${prompt} Focus on providing information about the subject in the drawing rather than describing the drawing itself. Provide educational, factual content. Present your response in a well-structured format with clear headings (using **bold** markdown), organized sections, and proper formatting to make it visually appealing and easy to read.`;
     }
 
     // Log the full request data for verification

@@ -65,6 +65,7 @@ const HowItWorks: React.FC = () => {
         position: 'relative',
         py: { xs: 10, md: 16 },
         overflow: 'hidden',
+        scrollMarginTop: '80px',
         background: theme.palette.mode === 'dark'
           ? 'linear-gradient(180deg, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.8))'
           : 'linear-gradient(180deg, rgba(248, 250, 252, 0), rgba(248, 250, 252, 0.8))',

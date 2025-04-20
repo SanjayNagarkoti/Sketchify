@@ -24,15 +24,12 @@ const Contact: React.FC = () => {
 
   return (
     <Box 
+      component="section"
       id="contact" 
       sx={{ 
-        pt: '80px',
-        minHeight: '100vh',
+        position: 'relative',
+        py: { xs: 10, md: 16 },
         scrollMarginTop: '80px',
-        mb: 8,
-        background: theme.palette.mode === 'dark' 
-          ? `linear-gradient(135deg, ${alpha('#0A1929', 0.9)} 0%, ${alpha('#1A2027', 0.9)} 100%)`
-          : `linear-gradient(135deg, ${alpha('#F8FAFF', 0.9)} 0%, ${alpha('#EEF2FF', 0.9)} 100%)`,
       }}
     >
       <Container maxWidth="md">
