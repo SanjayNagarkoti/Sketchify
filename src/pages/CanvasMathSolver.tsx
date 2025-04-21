@@ -79,63 +79,62 @@ const CanvasMathSolver: React.FC = () => {
   };
 
   const handleSolveMath = async () => {
-    try {
-      setIsSolving(true);
-      setSolution(null);
-      setSteps([]);
-      
-      // Start progress animation
-      let progress = 0;
-      const progressInterval = setInterval(() => {
-        progress += Math.random() * 15;
-        if (progress > 90) {
-          progress = 90;
-          clearInterval(progressInterval);
-        }
-        setLoadingProgress(progress);
-      }, 300);
-      
-      // Get reference to the canvas
-      const stageRef = canvasRef.current?.stageRef;
-      
-      // Convert canvas to image
-      const imageData = await canvasToImage(stageRef);
-      
-      if (!imageData) {
-        showSnackbar('Could not capture the canvas. Please try again.', 'error');
-        setIsSolving(false);
-        clearInterval(progressInterval);
-        setLoadingProgress(0);
-        return;
-      }
-      
-      // Send to Gemini for math solving
-      const mathResponse = await analyzeMathProblem(imageData, input);
-      
-      // Parse the response for solution and steps
-      const parsedResponse = parseMathResponse(mathResponse);
-      
-      // Set the solution and steps
-      setLoadingProgress(100);
-      setTimeout(() => {
-        setSolution(parsedResponse.solution);
-        setSteps(parsedResponse.steps);
-        showSnackbar('Solution generated successfully!', 'success');
-        setIsSolving(false);
-        setLoadingProgress(0);
-        
-        // Clear input
-        setInput('');
-      }, 500);
-      
-    } catch (error) {
-      console.error('Error in math analysis:', error);
-      showSnackbar('Sorry, there was an error solving your math problem. Please try again.', 'error');
-      setIsSolving(false);
-      setLoadingProgress(0);
+    if (!canvasRef.current) {
+      showSnackbar('Canvas is not available', 'error');
+      return;
     }
     
-    clearInterval(progressInterval);
+    setIsSolving(true);
+    setLoadingProgress(0);
+    setSolution(null);
+    
+    // Define progressInterval variable to track the interval
+    let progressInterval: NodeJS.Timeout | undefined = undefined;
+    
+    // Start progress animation
+    progressInterval = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + Math.random() * 10;
+      });
+    }, 500);
+    
+    // Get reference to the canvas
+    const stageRef = canvasRef.current?.stageRef;
+    
+    // Convert canvas to image
+    const imageData = await canvasToImage(stageRef);
+    
+    if (!imageData) {
+      showSnackbar('Could not capture the canvas. Please try again.', 'error');
+      setIsSolving(false);
+      clearInterval(progressInterval);
+      setLoadingProgress(0);
+      return;
+    }
+    
+    // Send to Gemini for math solving
+    const mathResponse = await analyzeMathProblem(imageData, input);
+    
+    // Parse the response for solution and steps
+    const parsedResponse = parseMathResponse(mathResponse);
+    
+    // Set the solution and steps
+    setLoadingProgress(100);
+    setTimeout(() => {
+      setSolution(parsedResponse.solution);
+      setSteps(parsedResponse.steps);
+      showSnackbar('Solution generated successfully!', 'success');
+      setIsSolving(false);
+      setLoadingProgress(0);
+      
+      // Clear input
+      setInput('');
+    }, 500);
+    
   };
 
   const parseMathResponse = (response: string) => {
