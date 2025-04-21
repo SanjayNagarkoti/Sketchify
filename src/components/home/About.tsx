@@ -73,7 +73,7 @@ const About: React.FC = () => {
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'contain',
           zIndex: -1,
-        }}
+      }}
       />
       
       <Container maxWidth="lg">
@@ -116,8 +116,8 @@ const About: React.FC = () => {
             WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     textFillColor: 'transparent',
-                  }}
-                >
+          }}
+        >
                   Bridging Creativity & Technology
                 </Typography>
                 
@@ -313,7 +313,7 @@ const About: React.FC = () => {
                       '&:hover': {
                         transform: 'translateY(-5px)',
                       },
-                    }}
+                }}
                   >
                     <Box
                       sx={{

@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// API Keys
-const UNSPLASH_API_KEY = 'pogDlbImlFebL3VyFGD5PvEjBTPSWzzrjSqV8GHez-I';
-const PIXABAY_API_KEY = '49000944-99d3b88ade1655685e032343f';
-const PEXELS_API_KEY = '1WqfnKiKVaEQq2M2lAVZpjgB3oWCRC8veCNGJgyqB1NVv8TPSFzcQRSO';
+// API Keys from environment variables with fallbacks
+const UNSPLASH_API_KEY = import.meta.env.VITE_UNSPLASH_API_KEY || 'pogDlbImlFebL3VyFGD5PvEjBTPSWzzrjSqV8GHez-I';
+const PIXABAY_API_KEY = import.meta.env.VITE_PIXABAY_API_KEY || '49000944-99d3b88ade1655685e032343f';
+const PEXELS_API_KEY = import.meta.env.VITE_PEXELS_API_KEY || '1WqfnKiKVaEQq2M2lAVZpjgB3oWCRC8veCNGJgyqB1NVv8TPSFzcQRSO';
 
 // Image result interface
 export interface ImageResult {

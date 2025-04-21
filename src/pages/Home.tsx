@@ -124,7 +124,7 @@ const Home: React.FC = () => {
         sx={{ position: 'relative', zIndex: 1 }}
         id="home"
       >
-        <Hero />
+      <Hero />
       </Box>
       
       {/* How It Works Section */}
@@ -136,7 +136,7 @@ const Home: React.FC = () => {
         }}
         id="how-it-works"
       >
-        <HowItWorks />
+      <HowItWorks />
       </Box>
       
       {/* Tools Showcase Section */}
@@ -165,7 +165,7 @@ const Home: React.FC = () => {
         }}
         id="about"
       >
-        <About />
+      <About />
       </Box>
       
       {/* Contact Section */}
@@ -177,7 +177,7 @@ const Home: React.FC = () => {
         }}
         id="contact"
       >
-        <Contact />
+      <Contact />
       </Box>
       
       {/* Footer */}

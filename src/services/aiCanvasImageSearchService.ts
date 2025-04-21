@@ -1,8 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { canvasToImage } from "./aiAssistantService"; // Reuse the canvas capture function
 
-// Initialize with the API key
-const genAI = new GoogleGenerativeAI("AIzaSyB3WGC_mitL3o_uHyFhASPrO5RhvbV9LEI");
+// Initialize with API key from environment variables or fallback to default
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyB3WGC_mitL3o_uHyFhASPrO5RhvbV9LEI";
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 /**
  * Analyzes the canvas image and user input to generate a search query

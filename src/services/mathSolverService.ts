@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Initialize with the API key
-const genAI = new GoogleGenerativeAI("AIzaSyB3WGC_mitL3o_uHyFhASPrO5RhvbV9LEI");
+// Initialize with API key from environment variables or fallback to default
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyB3WGC_mitL3o_uHyFhASPrO5RhvbV9LEI";
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // Reuse the canvas to image function from the AI assistant service
 export const canvasToImage = async (stageRef: any): Promise<string> => {
@@ -89,7 +90,7 @@ export const analyzeMathProblem = async (imageData: string, additionalContext: s
     
     Provide your solution in this format:
     1. First identify what type of math problem this is
-    2. List the steps to solve it clearly and logically
+    2. List the steps to solve it clearly and logically and strictly make sure that it is user friendly and human readable and no unnecessary tags or symbols are there in the solution.
     3. Provide the final answer clearly marked as "Solution: [answer]"
     
     If you see multiple problems, solve each one separately with its own steps and solution.`;

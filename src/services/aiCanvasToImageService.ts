@@ -1,25 +1,86 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Initialize with API keys
-const genAI = new GoogleGenerativeAI("AIzaSyB3WGC_mitL3o_uHyFhASPrO5RhvbV9LEI");
+// Initialize with API key from environment variables or fallback to default
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyB3WGC_mitL3o_uHyFhASPrO5RhvbV9LEI";
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-// Store multiple ImagePig API keys to alternate between them
-const IMAGEPIG_API_KEYS = [
-  "9c670150-ced2-4e4a-a657-41f11b44c4f3",
-  "659d3d2a-552a-4a72-a546-bb6090468d06",
-  "aa8d0b3f-5521-4f24-9362-5c002a0b4aad",
-  "b4007be6-b260-41ed-bd59-54729705c6c0"
-];
-// Meshy api key: msy_WuVvmh8yEiENdpG5bIx1KMuY1eVOOaGbxvGt
-// Counter to track which API key to use
-let apiKeyIndex = 0;
+// Store multiple ImagePig API keys with usage tracking
+interface ApiKeyInfo {
+  key: string;
+  usageCount: number;
+  maxUsage: number;
+}
 
-// Function to get the next API key in rotation
-const getNextApiKey = () => {
-  const key = IMAGEPIG_API_KEYS[apiKeyIndex];
-  // Move to next key for next request (with wraparound)
-  apiKeyIndex = (apiKeyIndex + 1) % IMAGEPIG_API_KEYS.length;
-  return key;
+// Function to get API keys from environment variables or use defaults
+const getApiKeysFromEnv = (): ApiKeyInfo[] => {
+  // Check if keys are defined in environment variables
+  if (import.meta.env.VITE_IMAGEPIG_API_KEYS) {
+    const envKeys = import.meta.env.VITE_IMAGEPIG_API_KEYS.split(',');
+    return envKeys.map((key: string) => ({
+      key: key.trim(),
+      usageCount: 0,
+      maxUsage: 29 // Setting to 29 to be safe with 30 request limit
+    }));
+  }
+  
+  // Fallback to hardcoded keys if environment variables are not available
+  return [
+    {
+      key: "9c670150-ced2-4e4a-a657-41f11b44c4f3",
+      usageCount: 0,
+      maxUsage: 29
+    },
+    {
+      key: "659d3d2a-552a-4a72-a546-bb6090468d06",
+      usageCount: 0,
+      maxUsage: 29
+    },
+    {
+      key: "aa8d0b3f-5521-4f24-9362-5c002a0b4aad",
+      usageCount: 0,
+      maxUsage: 29
+    },
+    {
+      key: "b4007be6-b260-41ed-bd59-54729705c6c0",
+      usageCount: 0,
+      maxUsage: 29
+    }
+  ];
+};
+
+// Initialize API keys
+const API_KEYS: ApiKeyInfo[] = getApiKeysFromEnv();
+
+// Current key index (start with the first key)
+let currentKeyIndex = 0;
+
+// Function to get the next API key in sequence with usage tracking
+const getNextApiKey = (): string => {
+  // If all keys are exhausted, reset usage counts
+  if (API_KEYS.length === 0 || currentKeyIndex >= API_KEYS.length) {
+    console.warn("All API keys have reached their usage limits. Resetting usage counts.");
+    API_KEYS.forEach(keyInfo => {
+      keyInfo.usageCount = 0;
+    });
+    currentKeyIndex = 0;
+  }
+  
+  // Get the current key info
+  const keyInfo = API_KEYS[currentKeyIndex];
+  
+  // Increment usage count
+  keyInfo.usageCount++;
+  
+  // Log usage for debugging
+  console.log(`Using API key: ${keyInfo.key.substring(0, 8)}... (${keyInfo.usageCount}/${keyInfo.maxUsage})`);
+  
+  // If the key has reached its usage limit, move to the next key
+  if (keyInfo.usageCount >= keyInfo.maxUsage) {
+    console.log(`API key ${keyInfo.key.substring(0, 8)}... has reached its usage limit. Moving to next key.`);
+    currentKeyIndex++;
+  }
+  
+  return keyInfo.key;
 };
 
 /**
@@ -101,7 +162,7 @@ const generatePromptFromCanvas = async (
   "You are an expert in text-to-image prompt engineering. " +
   "Carefully analyze the uploaded sketch or drawing and create a concise, detailed prompt that will generate a high-quality, fully detailed, full-sized image that closely resembles and refines the sketch. " +
   "Your goal is to turn the sketch into a realistic or artistic version while preserving its original layout, subject, and composition. " +
-  "IMPORTANT: Prioritize the user’s exact requests and guidance where given, and treat them as mandatory. " +
+  "IMPORTANT: Prioritize the user's exact requests and guidance where given, and treat them as mandatory. " +
   "Focus on style, subject, composition, colors, mood, and completeness. " +
   "Do NOT let the image appear cropped, incomplete, or different in structure from the sketch. " +
   "Limit the output to 75 words, and return only the generation prompt without any extra text or explanation.";
@@ -126,7 +187,7 @@ const generatePromptFromCanvas = async (
 
 /**
  * Calls ImagePig API to generate an image from a prompt
- * Uses alternating API keys to avoid rate limits
+ * Uses sequential API keys with usage tracking
  */
 const generateImageWithImagePig = async (prompt: string): Promise<{
   success: boolean;
@@ -135,9 +196,8 @@ const generateImageWithImagePig = async (prompt: string): Promise<{
   imageBase64?: string;
 }> => {
   try {
-    // Get the next API key in rotation
+    // Get the next API key in the sequence
     const apiKey = getNextApiKey();
-    console.log(`Using API key index: ${apiKeyIndex === 0 ? IMAGEPIG_API_KEYS.length - 1 : apiKeyIndex - 1}`);
     
     // Call the ImagePig API
     const response = await fetch('https://api.imagepig.com/xl', {
@@ -152,8 +212,17 @@ const generateImageWithImagePig = async (prompt: string): Promise<{
     if (!response.ok) {
       // If we get a rate limit error, try with the next key immediately
       if (response.status === 429) {
-        console.log("Rate limit hit, trying with next API key...");
-        // Use the next key
+        console.log("Rate limit hit, trying with next key...");
+        
+        // Force move to next key if current one hit rate limit
+        if (currentKeyIndex < API_KEYS.length - 1) {
+          currentKeyIndex++;
+        } else {
+          // If we're at the last key, go back to the first one
+          currentKeyIndex = 0;
+        }
+        
+        // Get a fresh key
         const nextApiKey = getNextApiKey();
         
         const retryResponse = await fetch('https://api.imagepig.com/xl', {
